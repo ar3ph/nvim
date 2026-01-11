@@ -1,6 +1,3 @@
-if vim.g.vscode then
-    return
-end
 -- Remap leaving 'terminal mode' to double tap esc
 vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>")
 

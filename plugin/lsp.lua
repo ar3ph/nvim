@@ -1,6 +1,3 @@
-if vim.g.vscode then
-    return
-end
 vim.lsp.config('*', {
     root_markers = { '.git' },
 })
