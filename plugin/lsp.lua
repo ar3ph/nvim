@@ -76,12 +76,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
             vim.diagnostic.config(config)
         end)
-        vim.keymap.set('n', '<F8>', function()
-            vim.diagnostic.open_float({
-                severity = { min = vim.diagnostic.severity.WARN },
-            })
-        end, { desc = 'Show warning diagnostics' })
-
 
         local excluded_filetypes = { php = true, c = true, cpp = true }
         if not client:supports_method('textDocument/willSaveWaitUntil')
