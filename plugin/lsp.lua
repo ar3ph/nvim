@@ -3,9 +3,7 @@ vim.lsp.config('*', {
 })
 
 vim.diagnostic.config({
-    virtual_text  = {
-        severity = { min = vim.diagnostic.severity.ERROR },
-    },
+    virtual_text  = false,
     severity_sort = true,
     float         = {
         style  = 'minimal',
@@ -53,19 +51,30 @@ vim.api.nvim_create_autocmd('LspAttach', {
         map('n', '<F2>', vim.lsp.buf.rename)
         map({ 'n', 'x' }, '<F3>', function() vim.lsp.buf.format({ async = true }) end)
         map('n', '<F4>', vim.lsp.buf.code_action)
-        local warnings_visible = false
+        local diagnostic_state = 0 -- 0: nothing, 1: errors only, 2: warnings+errors
         map('n', '<F7>', function()
-            warnings_visible = not warnings_visible
+            diagnostic_state = (diagnostic_state + 1) % 3
 
-            local min_severity = warnings_visible
-                and vim.diagnostic.severity.WARN
-                or vim.diagnostic.severity.ERROR
+            local config = {}
 
-            vim.diagnostic.config({
-                virtual_text = {
-                    severity = { min = min_severity },
-                },
-            })
+            if diagnostic_state == 0 then
+                -- Show nothing
+                config = {
+                    virtual_text = false,
+                }
+            elseif diagnostic_state == 1 then
+                -- Show errors only
+                config = {
+                    virtual_text = { severity = { min = vim.diagnostic.severity.ERROR } },
+                }
+            else
+                -- Show warnings and errors
+                config = {
+                    virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
+                }
+            end
+
+            vim.diagnostic.config(config)
         end)
 
 
