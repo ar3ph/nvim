@@ -3,7 +3,9 @@ vim.lsp.config('*', {
 })
 
 vim.diagnostic.config({
-    virtual_text  = true,
+    virtual_text  = {
+        severity = { min = vim.diagnostic.severity.ERROR },
+    },
     severity_sort = true,
     float         = {
         style  = 'minimal',
@@ -51,6 +53,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
         map('n', '<F2>', vim.lsp.buf.rename)
         map({ 'n', 'x' }, '<F3>', function() vim.lsp.buf.format({ async = true }) end)
         map('n', '<F4>', vim.lsp.buf.code_action)
+        map('n', '<F7>', function()
+            vim.diagnostic.open_float({
+                severity = { min = vim.diagnostic.severity.WARN },
+            })
+        end)
+
 
         local excluded_filetypes = { php = true, c = true, cpp = true }
         if not client:supports_method('textDocument/willSaveWaitUntil')
