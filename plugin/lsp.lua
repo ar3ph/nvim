@@ -53,9 +53,18 @@ vim.api.nvim_create_autocmd('LspAttach', {
         map('n', '<F2>', vim.lsp.buf.rename)
         map({ 'n', 'x' }, '<F3>', function() vim.lsp.buf.format({ async = true }) end)
         map('n', '<F4>', vim.lsp.buf.code_action)
+        local warnings_visible = false
         map('n', '<F7>', function()
-            vim.diagnostic.open_float({
-                severity = { min = vim.diagnostic.severity.WARN },
+            warnings_visible = not warnings_visible
+
+            local min_severity = warnings_visible
+                and vim.diagnostic.severity.WARN
+                or vim.diagnostic.severity.ERROR
+
+            vim.diagnostic.config({
+                virtual_text = {
+                    severity = { min = min_severity },
+                },
             })
         end)
 
