@@ -10,6 +10,12 @@ vim.api.nvim_create_autocmd('PackChanged', {
       if r.code ~= 0 then
         vim.notify('fzf-native build failed:\n' .. (r.stderr or ''), vim.log.levels.ERROR)
       end
+    elseif name == 'blink.cmp' then
+      vim.notify('Building blink.cmp...', vim.log.levels.INFO)
+      local r = vim.system({ 'cargo', 'build', '--release' }, { cwd = ev.data.path }):wait()
+      if r.code ~= 0 then
+        vim.notify('blink.cmp build failed:\n' .. (r.stderr or ''), vim.log.levels.ERROR)
+      end
     elseif name == 'nvim-treesitter' then
       vim.notify('Updating treesitter parsers...', vim.log.levels.INFO)
       vim.cmd('TSUpdateSync')
@@ -38,6 +44,8 @@ vim.pack.add({
   { src = 'https://github.com/folke/snacks.nvim' },
   { src = 'https://github.com/MunifTanjim/nui.nvim' },
   { src = 'https://github.com/folke/noice.nvim' },
+  { src = 'https://github.com/saghen/blink.lib' },
+  { src = 'https://github.com/saghen/blink.cmp' },
 })
 
 require('tokyonight').setup({
@@ -62,6 +70,19 @@ require('snacks').setup({
 })
 
 require('noice').setup({})
+
+require('blink.cmp').setup({
+  keymap = { preset = 'default' },
+  appearance = { nerd_font_variant = 'mono' },
+  completion = {
+    documentation = { auto_show = true, auto_show_delay_ms = 200 },
+    ghost_text = { enabled = true },
+  },
+  sources = {
+    default = { 'lsp', 'path', 'snippets', 'buffer' },
+  },
+  signature = { enabled = true },
+})
 
 require('lualine').setup({
   options = { theme = 'tokyonight' },

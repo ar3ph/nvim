@@ -32,10 +32,3 @@ map('n', '<leader>lr', vim.lsp.buf.rename, { desc = 'LSP rename' })
 map('n', '<leader>la', vim.lsp.buf.code_action, { desc = 'LSP code action' })
 map('n', '<leader>lf', function() vim.lsp.buf.format({ async = true }) end, { desc = 'LSP format' })
 
-map('i', '<C-y>', function()
-  if vim.fn.pumvisible() == 1 then return '<C-y>' end
-  return '<C-y>'
-end, { expr = true })
-map('i', '<CR>', function()
-  return vim.fn.pumvisible() == 1 and '<C-y>' or '<CR>'
-end, { expr = true, desc = 'Confirm completion' })

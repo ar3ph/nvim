@@ -1,6 +1,6 @@
 local servers = {
   pyright = {
-    cmd = { 'pyright-langserver', '--stdio' },
+    cmd = { 'basedpyright-langserver', '--stdio' },
     filetypes = { 'python' },
     root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', '.git' },
     settings = {
@@ -14,7 +14,16 @@ local servers = {
       },
     },
   },
+  jedi = {
+    cmd = { 'jedi-language-server'},
+    filetypes = { 'python' },
+    root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', '.git' },
+    settings = {
+    },
+  },
+
 }
+
 
 for name, cfg in pairs(servers) do
   vim.lsp.config(name, cfg)
@@ -33,10 +42,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(ev)
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
     if not client then return end
-
-    if client:supports_method('textDocument/completion') then
-      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
-    end
 
     if client:supports_method('textDocument/formatting') then
       vim.api.nvim_create_autocmd('BufWritePre', {
