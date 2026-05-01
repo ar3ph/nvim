@@ -35,6 +35,9 @@ vim.pack.add({
   { src = 'https://github.com/folke/which-key.nvim' },
   { src = 'https://github.com/kylechui/nvim-surround' },
   { src = 'https://github.com/windwp/nvim-autopairs' },
+  { src = 'https://github.com/folke/snacks.nvim' },
+  { src = 'https://github.com/MunifTanjim/nui.nvim' },
+  { src = 'https://github.com/folke/noice.nvim' },
 })
 
 require('tokyonight').setup({
@@ -44,6 +47,21 @@ require('tokyonight').setup({
 vim.cmd.colorscheme('tokyonight')
 
 require('nvim-web-devicons').setup({})
+
+require('snacks').setup({
+  notifier = { enabled = true },
+  input = { enabled = true },
+  indent = { enabled = true },
+  dashboard = {
+    enabled = true,
+    sections = {
+      { section = 'header' },
+      { section = 'keys', gap = 1, padding = 1 },
+    },
+  },
+})
+
+require('noice').setup({})
 
 require('lualine').setup({
   options = { theme = 'tokyonight' },
