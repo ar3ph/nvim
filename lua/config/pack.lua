@@ -16,6 +16,7 @@ vim.api.nvim_create_autocmd('PackChanged', {
       if r.code ~= 0 then
         vim.notify('blink.cmp build failed:\n' .. (r.stderr or ''), vim.log.levels.ERROR)
       end
+
     elseif name == 'nvim-treesitter' then
       vim.notify('Updating treesitter parsers...', vim.log.levels.INFO)
       vim.cmd('TSUpdateSync')
@@ -71,8 +72,12 @@ require('snacks').setup({
 
 require('noice').setup({})
 
-require('blink.cmp').setup({
-  keymap = { preset = 'default' },
+
+local cmp = require('blink.cmp')
+
+cmp.build():wait(60000)
+cmp.setup({
+  keymap = { preset = 'super-tab' },
   appearance = { nerd_font_variant = 'mono' },
   completion = {
     documentation = { auto_show = true, auto_show_delay_ms = 200 },
